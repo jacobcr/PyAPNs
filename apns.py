@@ -147,10 +147,20 @@ class APNsConnection(object):
         return self._ssl
 
     def read(self, n=None):
-        return self._connection().read(n)
+        try:
+            return self._connection().read(n)
+        except:
+            self._disconnect()
+            self._ssl = None
+            raise
 
     def write(self, string):
-        return self._connection().write(string)
+        try:
+            return self._connection().write(string)
+        except:
+            self._disconnect()
+            self._ssl = None
+            raise
 
 
 class PayloadAlert(object):
